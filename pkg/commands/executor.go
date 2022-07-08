@@ -113,6 +113,12 @@ func NewExecutor(version, commit, date string) *Executor {
 	if (commandLineCfg == nil || commandLineCfg.Run.Go == "") && e.cfg != nil && e.cfg.Run.Go == "" {
 		e.cfg.Run.Go = config.DetectGoVersion()
 	}
+	
+	// disable vcs stamping
+	if e.cfg.Run.Go == "1.18" {
+		e.cfg.Run.Args = append(e.cfg.Run.Args, "-buildvcs=false")
+	}
+
 
 	// recreate after getting config
 	e.DBManager = lintersdb.NewManager(e.cfg, e.log).WithCustomLinters()
